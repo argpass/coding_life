@@ -6,7 +6,6 @@
 #define ALG_DSTRING_H
 
 #ifndef size_t
-#
 
 typedef char *str;
 
