@@ -1,24 +1,40 @@
-//
-// Created by akun on 15-10-13.
-//
-
 #include "dblist.h"
 
 /* default util function for list */
-int list_default_cmp_value(void *va, void *vb){
-    return va == vb;
+int list_default_cmp_value(const void *va, const void *vb){
+    if(va == vb)
+        return 0;
+    if(va > vb)
+        return 1;
+    else
+        return -1;
+}
+
+void list_default_free_value(void *value){
+    free(value);
+}
+
+void * list_default_copy_value(void *value){
+    return value;
 }
 
 /* Functions Implements */
 
 /* create a list instance */
-struct List *list_create(void){
+struct List *list_create(func_copy_value cp, func_cmp_value cmp, func_free_value free_value){
     struct List *list;
 
     if((list = malloc(sizeof(struct List))) == NULL)
         return NULL;
-    list->copy_value = list->free_value = NULL;
-    list->cmp_value = list_default_cmp_value;
+    list->copy_value = cp;
+    list->cmp_value = cmp;
+    list->free_value = free_value;
+    if(cp ==NULL)
+        install_copy_method(list, list_default_copy_value);
+    if(cmp == NULL)
+        install_comp_method(list, list_default_cmp_value);
+    if(free_value == NULL)
+        install_free_method(list, list_default_free_value);
     list->len = 0;
     list->head = list->tail = NULL;
     return list;
@@ -54,22 +70,6 @@ struct List *list_tail_append(struct List *list, void *value){
     return list;
 }
 
-/* delete tail node and return deleted value */
-struct List *list_tail_pop(struct List *list, void *value){
-    struct ListNode *temp;
-
-    if(list_len(list) == 0){
-        value = NULL;
-    } else {
-        temp = list->tail;
-        *value = *temp;
-        list->tail = temp->prev;
-        list->len--;
-    }
-    free(temp);
-    return list;
-}
-
 
 struct List *list_head_append(struct List *list, void *value){
     struct ListNode *node;
@@ -84,11 +84,8 @@ struct List *list_head_append(struct List *list, void *value){
         node->next->prev = node;
         list->head = node;
     }
+    list->len++;
     return list;
-}
-
-struct List *list_head_pop(struct List *list, void *value){
-    list->
 }
 
 /* delete a node from list , node must be in list */
@@ -114,7 +111,7 @@ struct List *list_del_node(struct List *list, struct ListNode *node){
 struct List *list_insert(struct List *list, struct ListNode *position, void *value, int after){
     struct ListNode *node;
 
-    if((node == list_create_node(value)) == NULL)
+    if((node = list_create_node(value)) == NULL)
         return NULL;
     if(position == NULL)
         return NULL;
@@ -173,7 +170,7 @@ struct ListNode *list_locate(struct List *list, long index){
     if(index < 0 || index >= list_len(list))
         return NULL;
 
-    if((iterator = list_iter_create(list)) == NULL)
+    if((iterator = list_iter_create(list, HEAD_START)) == NULL)
         return NULL;
     while((current = list_iter_next(iterator))){
         i++;
@@ -194,7 +191,7 @@ long list_index(struct List *list, void *key){
     if(is_empty(list))
         return err_ret;
 
-    if((iterator = list_iter_create(list)) == NULL)
+    if((iterator = list_iter_create(list, HEAD_START)) == NULL)
         return -1;
     while((current = list_iter_next(iterator))){
         i++;
@@ -251,6 +248,20 @@ void list_rotate(struct List *list){
     list->head = node;
 }
 
+/* free this list of course with all nodes */
 void list_destory(struct List *list){
+    struct ListNode *current;
+    struct ListIterator * iterator;
+
+    iterator = list_iter_create(list, HEAD_START);
+    if(iterator == NULL)
+        return;
+    while ((current = list_iter_next(iterator))){
+        list->free_value(current->value);
+        free(current);
+    }
+    list_iter_destory(iterator);
+
+    list->len = 0;
     free(list);
 }

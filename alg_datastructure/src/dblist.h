@@ -1,20 +1,27 @@
-//
-// Created by akun on 15-10-13.
-//
+/**
+ * ******************* double linked list ************************
+ */
 
 #ifndef ALG_T_DBLIST_H
 #define ALG_T_DBLIST_H
+
+#include "stdlib.h"
 
 
 /*
  * Node, List, and Iterator define
  */
-typedef struct ListNode {
+struct ListNode {
     struct ListNode *prev;
     struct ListNode *next;
     void *value;
 };
 
+
+
+typedef void *(*func_copy_value)(const void *);
+typedef void (*func_free_value)(void *);
+typedef int (*func_cmp_value)(const void *value_a, const void *value_b);
 
 typedef struct List {
     struct ListNode *head;
@@ -22,13 +29,13 @@ typedef struct List {
     unsigned long len;
 
     // Copy value to a new one
-    void *(*copy_value)(void *);
+    func_copy_value copy_value;
 
     // Free value point
-    void (*free_value)(void *);
+    func_free_value free_value;
 
     // Compare two value
-    int (*cmp_value)(void *value_a, void *value_b);
+    func_cmp_value cmp_value;
 };
 
 
@@ -57,13 +64,11 @@ typedef struct ListIterator {
 
 
 /* Functions Definition */
-struct List *list_create(void);
+struct List *list_create(func_copy_value cp, func_cmp_value cmp, func_free_value free_value);
 struct ListNode *list_create_node(void *value);
 
 struct List *list_tail_append(struct List *, void *value);
-struct List *list_tail_pop(struct List *, void *value);
 struct List *list_head_append(struct List *, void *value);
-struct List *list_head_pop(struct List *, void *value);
 struct List *list_del_node(struct List *, struct ListNode *);
 struct List *list_insert(struct List *, struct ListNode *position, void *value, int after);
 
@@ -77,7 +82,6 @@ void list_iter_destory(struct ListIterator *);
 
 void list_rotate(struct List *);
 
-void list_node_destory(struct ListNode *node);
 void list_destory(struct List *);
 
 
