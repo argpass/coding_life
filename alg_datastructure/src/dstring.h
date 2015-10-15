@@ -12,7 +12,6 @@
 #define STR_OK 0
 #define STATUS int
 
-#ifndef size_t
 
 typedef char *str;
 

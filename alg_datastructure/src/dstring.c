@@ -1,6 +1,3 @@
-//
-// Created by akun on 15-10-14.
-//
 
 #include "dstring.h"
 #include "string.h"
@@ -35,14 +32,29 @@ str strNewLen(const char *origin, size_t len){
 
 str strAddCap(str s, size_t added_len){
     char *p;
-    p = (char *)malloc(sizeof(struct str_t) + strLength(s) + 1 + added_len);
+    char *head = (char *)strHead(s);
+    size_t head_len = sizeof(struct str_t);
+    size_t old_len = strLength(s);
+    size_t _raw_str_space_len = head_len + old_len + 1;
+
+    /* allocate new space */
+    p = (char *)realloc(strHead(s), _raw_str_space_len + added_len);
     if(p == NULL)
         return NULL;
-     // TODO
+    if(p != head){
+        printf("new space and free old\n");
+        // TODO why>if not to free result in mem leak ,but if do follow cast err
+//        free(head);
+    }
+
+    /* let s point to new space's data field
+     * from now on the s is a new str
+     */
+    s = p + sizeof(struct str_t);
+    /* initial unused field */
     memset(s + strLength(s) + 1, 0, added_len);
     strHead(s)->cap += added_len;
-    free(p);
-    return STR_OK;
+    return s;
 }
 
 /* Append char * sb to sa */
@@ -55,9 +67,11 @@ str strConcat(str sa, const char *sb){
     /* ensure available space more than added_len */
     if((strCap(sa)-strLength(sa)) < added_len){
         /* add cap , return NULL if fail */
-        if(strAddCap(sa, added_len) != STR_OK)
+        if(strAddCap(sa, added_len) == NULL)
             return NULL;
     }
+    printf("->:%s\n", sa);
+    printf("len->:%d\n", strLength(sa));
     /* copy data to sa and update len info */
     memcpy(sa + strLength(sa), sb, added_len);
     strHead(sa)->len = strLength(sa) + added_len;

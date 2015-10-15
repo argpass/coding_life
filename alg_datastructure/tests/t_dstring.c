@@ -1,7 +1,3 @@
-//
-// Created by akun on 15-10-14.
-//
-
 #include <string.h>
 #include "stdlib.h"
 #include "stdio.h"
@@ -35,7 +31,7 @@ int main(void){
     printf("after concat cap of s:>%d<\n", strCap(s));
 
     /****************** release ******************/
-    strAddCap(b, 3);
+    strAddCap(b, 30);
     strFree(s);
     strFree(b);
     strFree(c);
