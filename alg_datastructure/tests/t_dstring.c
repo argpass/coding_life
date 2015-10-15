@@ -5,17 +5,39 @@
 #include <string.h>
 #include "stdlib.h"
 #include "stdio.h"
+#include "dstring.h"
 
-struct __attribute__ ((__packed__)) my16 {
-    u_int64_t a;
-    u_int32_t b;
-};
 
 int main(void){
-    char *p = malloc(sizeof(100));
-    strcpy(p, "abcdefg");
-    p[2] = '\0';
-    printf("len %d\n", strlen(p));
+    /* ***************** init *********************/
+    str s = strNew("hello");
+    str b = strNewLen("go", 0);
+    printf("init s addr:>%d<\n", s);
+    printf("init s:>%s<\n", s);
+    printf("init b:>%s<\n", b);
+    printf("len of b is:%d\n", strLength(b));
+    printf("len of s is:%d\n", strLength(s));
+    printf("cap of b is:%d\n", strCap(b));
+    printf("cap of s is:%d\n", strCap(s));
+
+    /******************* dup **********************/
+    str c = strDup(s);
+    printf("dup c addr:>%d<\n", c);
+    printf("addr of c not equal s:%d\n", s != c);
+    printf("dup c:>%s<\n", c);
+    printf("value of c is same with s's :%d\n", strEqual(c, s));
+
+    /****************** modify *********************/
+    s = strConcat(s, "88");
+    printf("after concat s addr:>%d<\n", s);
+    printf("after concat s:>%s<\n", s);
+    printf("after concat len of s:>%d<\n", strLength(s));
+    printf("after concat cap of s:>%d<\n", strCap(s));
+
+    /****************** release ******************/
+    strAddCap(b, 3);
+    strFree(s);
+    strFree(b);
+    strFree(c);
     return 0;
 }
-

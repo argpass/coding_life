@@ -6,6 +6,7 @@
 #define ALG_T_DBLIST_H
 
 #include "stdlib.h"
+#include "base.h"
 
 
 /*
