@@ -30,6 +30,7 @@ str strNewLen(const char *origin, size_t len){
     return s;
 }
 
+
 str strAddCap(str s, size_t added_len){
     char *p;
     char *head = (char *)strHead(s);
@@ -38,15 +39,9 @@ str strAddCap(str s, size_t added_len){
     size_t _raw_str_space_len = head_len + old_len + 1;
 
     /* allocate new space */
-    p = (char *)realloc(strHead(s), _raw_str_space_len + added_len);
+    p = (char *)realloc(head, _raw_str_space_len + added_len);
     if(p == NULL)
         return NULL;
-    if(p != head){
-        printf("new space and free old\n");
-        // TODO why>if not to free result in mem leak ,but if do follow cast err
-//        free(head);
-    }
-
     /* let s point to new space's data field
      * from now on the s is a new str
      */
@@ -67,11 +62,9 @@ str strConcat(str sa, const char *sb){
     /* ensure available space more than added_len */
     if((strCap(sa)-strLength(sa)) < added_len){
         /* add cap , return NULL if fail */
-        if(strAddCap(sa, added_len) == NULL)
+        if((sa = strAddCap(sa, added_len)) == NULL)
             return NULL;
     }
-    printf("->:%s\n", sa);
-    printf("len->:%d\n", strLength(sa));
     /* copy data to sa and update len info */
     memcpy(sa + strLength(sa), sb, added_len);
     strHead(sa)->len = strLength(sa) + added_len;
@@ -96,3 +89,23 @@ bool strEqual(str sa, const char *sb){
         return false;
     }
 };
+
+
+str strJoin(const char *sep, const char * str_seq[], size_t n){
+    str s;
+    size_t i;
+
+    if(str_seq == NULL || sep == NULL || n == 0)
+        return NULL;
+    s = strNewEmpty();
+    for(i = 0; i < n; i++){
+        printf("i:%d\n", i);
+        if(i == 0)
+            s = strConcat(s, str_seq[i]);
+        else{
+            s = strConcat(s, sep);
+            s = strConcat(s, str_seq[i]);
+        }
+    }
+    return s;
+}

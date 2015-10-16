@@ -24,16 +24,22 @@ int main(void){
     printf("value of c is same with s's :%d\n", strEqual(c, s));
 
     /****************** modify *********************/
-    s = strConcat(s, "88");
+    s = strConcat(s, "!");
     printf("after concat s addr:>%d<\n", s);
     printf("after concat s:>%s<\n", s);
     printf("after concat len of s:>%d<\n", strLength(s));
     printf("after concat cap of s:>%d<\n", strCap(s));
 
+    /* **************** join *********************/
+    char *seq[] = {"abc", "efgggggggggggggggggggggggggggggggggggggggg"};
+    printf("sizeof seq:%d\n", sizeof(seq)/sizeof(char *));
+    str d = strJoin(",", seq, sizeof(seq)/sizeof(char *));
+    printf("joind created str:%s\n", d);
+
     /****************** release ******************/
-    strAddCap(b, 30);
     strFree(s);
     strFree(b);
     strFree(c);
+    strFree(d);
     return 0;
 }

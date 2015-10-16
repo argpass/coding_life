@@ -37,14 +37,14 @@ struct __attribute__ ((__packed__)) str_t {
 str strNewLen(const char *s, size_t len);  // create a str from normal c style string
 str strConcat(str sa, const char *sb);  // concat sa and sb
 int strEqual(str sa, const char *sb);
-str strJoin(const char *sep, str str_seq[]);  // concat a str array with sep
-str strSub(str s, int start, int end);
+str strJoin(const char *sep, const char * str_seq[], size_t n);  // concat a str array with sep
+str strSub(const char *s, int start, int end);
 str strReplace(str s, const char *old, const char *to);
 size_t strIndex(str s, const char *target, size_t start);
 
 
 /* private functions */
-str strAddCap(str s, size_t added_len);
+static str strAddCap(str s, size_t added_len);
 
 
 #endif //ALG_DSTRING_H
