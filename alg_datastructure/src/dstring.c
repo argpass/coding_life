@@ -20,7 +20,7 @@ str strNewLen(const char *origin, size_t len){
     space =(char *)malloc(sizeof(char) * (head_size + len + 1));
     s = space + head_size;
     /* init head of str */
-    ((struct str_t*)space)->len = len;
+    ( (struct str_t*) space )->len = len;
     ((struct str_t*)space)->cap = len;
     /* init data field */
     memset(s, 0, len);

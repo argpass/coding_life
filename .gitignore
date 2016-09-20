@@ -1,4 +1,6 @@
 #gitbook ignore
+c_training/idea_py/*
+.D*
 */_book/*
 .idea/
 */.idea/*

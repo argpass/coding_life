@@ -31,12 +31,13 @@ int main(void){
     printf("after concat cap of s:>%d<\n", strCap(s));
 
     /* **************** join *********************/
-    char *seq[] = {"abc", "efgggggggggggggggggggggggggggggggggggggggg"};
+    char *seq[] = {"abc", "efggggggggggggggggggggggggggg"};
     printf("sizeof seq:%d\n", sizeof(seq)/sizeof(char *));
     str d = strJoin(",", seq, sizeof(seq)/sizeof(char *));
     printf("joind created str:%s\n", d);
 
     /****************** release ******************/
+    printf("this is a test string");
     strFree(s);
     strFree(b);
     strFree(c);
