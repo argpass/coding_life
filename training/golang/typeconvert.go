@@ -25,7 +25,7 @@ func (m ParamMap) GetInt(key string) (value int, err error) {
 	return value, err
 }
 
-func main() {
+func convertCustomType() {
 	var err error
 	var v int
 	var d = map[string]interface{}{"int": 99}
@@ -36,4 +36,17 @@ func main() {
 
 	v, err = c.GetInt("int")
 	fmt.Println(v, err)
+}
+
+func convertBasicType() {
+	var valueFloat float64 = 99
+	var valueInt int = 33
+
+	// convert float to int
+	valueInt = int(valueFloat)
+	fmt.Println(valueInt)
+}
+
+func main() {
+	convertBasicType()
 }
