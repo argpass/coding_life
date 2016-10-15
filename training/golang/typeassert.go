@@ -6,7 +6,11 @@ type Printer interface {
 	Print(string)
 }
 
-type SimplePrinter struct{}
+type Base struct{}
+
+type SimplePrinter struct {
+	Base
+}
 
 func (p *SimplePrinter) Print(s string) {
 	fmt.Println(s)
@@ -17,5 +21,10 @@ func main() {
 	if sp, ok := p.(*SimplePrinter); ok {
 		fmt.Println("it's SimplePrinter")
 		sp.Print("done")
+	}
+
+	var b interface{} = &SimplePrinter{}
+	if sp, ok := b.(*Base); ok {
+		fmt.Println("it's *Base")
 	}
 }
