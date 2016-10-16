@@ -24,7 +24,10 @@ func main() {
 	}
 
 	var b interface{} = &SimplePrinter{}
-	if sp, ok := b.(*Base); ok {
+	if _, ok := b.(*Base); ok {
 		fmt.Println("it's *Base")
 	}
+
+	// can't cast sub struct to base
+	(*Base)(&SimplePrinter{})
 }
