@@ -9,7 +9,7 @@ type Printer interface {
 type Base struct{}
 
 type SimplePrinter struct {
-	Base
+	*Base
 }
 
 func (p *SimplePrinter) Print(s string) {
@@ -30,6 +30,8 @@ func main() {
 	var b interface{} = &SimplePrinter{}
 	if _, ok := b.(*Base); ok {
 		fmt.Println("it's *Base")
+	} else {
+		fmt.Println("it's not *Base")
 	}
 
 	// can't cast sub struct to base

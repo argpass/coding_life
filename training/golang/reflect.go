@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"reflect"
+	"unsafe"
 )
 
 type Model interface {
@@ -60,7 +61,21 @@ func testNilInterface() {
 	}
 }
 
+func testSetter() {
+	var v = &FInt{99}
+	tp := reflect.Indirect(reflect.ValueOf(v))
+	//tp := (reflect.ValueOf(v))
+	fi := tp.Field(0)
+	// 使用unsafe指针来改变未导出变量值
+	var pt = (*int)(unsafe.Pointer(fi.Addr().Pointer()))
+	fmt.Println("pt value is ", *pt)
+	*pt = 88
+	//fi.Set(reflect.ValueOf(88))
+	fmt.Println("v is ", v)
+}
+
 func main() {
+	testSetter()
 	var b Model = &MyModel{}
 
 	// 0, only got fields num of *Base
