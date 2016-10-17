@@ -18,6 +18,10 @@ func (p *SimplePrinter) Print(s string) {
 
 func main() {
 	var p Printer = &SimplePrinter{}
+
+	// type assert
+	p.(*SimplePrinter).Print("assert successfully")
+
 	if sp, ok := p.(*SimplePrinter); ok {
 		fmt.Println("it's SimplePrinter")
 		sp.Print("done")
@@ -29,5 +33,5 @@ func main() {
 	}
 
 	// can't cast sub struct to base
-	(*Base)(&SimplePrinter{})
+	// (*Base)(&SimplePrinter{})
 }
