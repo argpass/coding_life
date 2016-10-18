@@ -24,8 +24,10 @@ func main() {
 	var m Model = &Person{}
 	fmt.Println(m.isModel())
 	var a Model
+	// yes
 	fmt.Println("a is nil?", a == nil)
 	var b Model = nil
+	// yes
 	fmt.Println("b is nil?", b == nil)
 	var c *Person = nil
 	// 相当于被装箱， d is Model<nil> but not nil
