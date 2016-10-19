@@ -47,6 +47,24 @@ func convertBasicType() {
 	fmt.Println(valueInt)
 }
 
+// 不能把[]interface{} 转 []int 尽管该interface{}是可以转为int
+func convertSlice() {
+	type VSlice []interface{}
+	type ISlice []int
+	var v = VSlice{2, 3}
+	var i = ISlice(v)
+	fmt.Println("convert v to ISlice:", i)
+}
+
+func convertFunc() {
+	type MapFunc func(x interface{})
+	var f = func(x interface{}) {}
+	fmt.Println("f is MapFunc ", MapFunc(f))
+	var f2 = func(x int) {}
+	fmt.Println("f2 is MapFunc ", MapFunc(f2))
+}
+
 func main() {
-	convertBasicType()
+	//convertSlice()
+	convertFunc()
 }

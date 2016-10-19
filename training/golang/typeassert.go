@@ -16,8 +16,14 @@ func (p *SimplePrinter) Print(s string) {
 	fmt.Println(s)
 }
 
+type MapFunc func(x interface{}) (v interface{})
+
 func main() {
 	var p Printer = &SimplePrinter{}
+	var f MapFunc
+	fmt.Println("f is nil ? ", f == nil)
+	f2 := func(x interface{}) (v interface{}) { return x }
+	fmt.Println("convert func:", MapFunc(f2))
 
 	// type assert
 	p.(*SimplePrinter).Print("assert successfully")

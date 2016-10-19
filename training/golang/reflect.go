@@ -74,12 +74,29 @@ func testSetter() {
 	fmt.Println("v is ", v)
 }
 
-func main() {
-	testSetter()
-	var b Model = &MyModel{}
+/////////////// 测试父子结构反射 //////////
+type Event struct{}
 
-	// 0, only got fields num of *Base
-	b.Fields()
-	show(b)
-	testNilInterface()
+// 无法从receiver 转到子结构
+func (p *Event) Who(q interface{}) {
+	tp := reflect.Indirect(reflect.ValueOf(q))
+	fmt.Println("tp of q is ", tp.Type())
+	fmt.Println("NumField:", tp.NumField())
+	tp = reflect.Indirect(reflect.ValueOf(p))
+	fmt.Println("tp of p is ", tp.Type())
+	fmt.Println("NumField:", tp.NumField())
+}
+
+type MyEvent struct {
+	*Event
+	ID int
+}
+
+func testReflectType() {
+	e := &MyEvent{&Event{}, 99}
+	e.Who(e)
+}
+
+func main() {
+	testReflectType()
 }
