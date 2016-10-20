@@ -10,6 +10,8 @@ func testCanMapKey() {
 	var i = 99
 	var a = map[*int]int{&i: i}
 	fmt.Println(a)
+	var c = map[interface{}]int{nil: i}
+	fmt.Println(c)
 }
 
 func main() {
