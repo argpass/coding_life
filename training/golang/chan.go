@@ -1,3 +1,5 @@
+// 1.chan 可以设置只读，只写，最小权限模式
+
 package main
 
 import (
@@ -29,6 +31,20 @@ func testSelect() {
 	}
 }
 
+func readOnlyChan() {
+	foo := func(ch <-chan int) {
+		i := <-ch
+		// can not write chan
+		// ch <- 4
+		fmt.Println("got ", i)
+	}
+	ch := make(chan int, 1)
+	ch <- 99
+	foo(ch)
+
+}
+
 func main() {
+	readOnlyChan()
 	testSelect()
 }

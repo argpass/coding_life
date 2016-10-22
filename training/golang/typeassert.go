@@ -42,4 +42,13 @@ func main() {
 
 	// can't cast sub struct to base
 	// (*Base)(&SimplePrinter{})
+
+	// switch type
+	var i interface{} = 99
+	switch tp := i.(type) {
+	case int:
+		fmt.Println("tp case int")
+	default:
+		fmt.Println("tp is ", tp)
+	}
 }
