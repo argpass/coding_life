@@ -18,6 +18,44 @@ func (p *SimplePrinter) Print(s string) {
 
 type MapFunc func(x interface{}) (v interface{})
 
+func testTypeSwitch() {
+	// switch type
+	var i interface{} = 99
+	switch tp := i.(type) {
+	case int:
+		fmt.Println("tp case int")
+	default:
+		fmt.Println("tp is ", tp)
+	}
+
+	// switch type
+	fmt.Println("test i64")
+	var i64 int64 = 990
+	var s string = ""
+	i = i64
+	switch tp := i.(type) {
+	case int64:
+		fmt.Println("tp case int64")
+		// now i can set tp to a int64 variable
+		i64 = tp
+	case int:
+		fmt.Println("tp is int")
+	case string:
+		s = tp
+		fmt.Println(s)
+	default:
+		fmt.Println("tp is ", tp)
+	}
+
+	// test rune
+	var rus = []rune{'我', '的', '天'}
+	var r interface{} = rus[0]
+	switch tp := r.(type) {
+	case rune:
+		fmt.Println("got rune ", string(tp))
+	}
+}
+
 func main() {
 	var p Printer = &SimplePrinter{}
 	var f MapFunc
@@ -42,13 +80,5 @@ func main() {
 
 	// can't cast sub struct to base
 	// (*Base)(&SimplePrinter{})
-
-	// switch type
-	var i interface{} = 99
-	switch tp := i.(type) {
-	case int:
-		fmt.Println("tp case int")
-	default:
-		fmt.Println("tp is ", tp)
-	}
+	testTypeSwitch()
 }
