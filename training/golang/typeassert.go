@@ -38,8 +38,10 @@ func testTypeSwitch() {
 		fmt.Println("tp case int64")
 		// now i can set tp to a int64 variable
 		i64 = tp
-	case int:
-		fmt.Println("tp is int")
+	case int, bool:
+		// now tp is interface{} value not int or bool type
+		// typeassert tp before to use it
+		fmt.Println("tp is int or bool")
 	case string:
 		s = tp
 		fmt.Println(s)
