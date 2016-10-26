@@ -14,6 +14,14 @@ func testCanMapKey() {
 	fmt.Println(c)
 }
 
+func testMapBasic() {
+	var d = map[string]string{}
+	d["name"] = "akun"
+	name := d["name"]
+	fmt.Println("got name ", name)
+}
+
 func main() {
+	testMapBasic()
 	testCanMapKey()
 }

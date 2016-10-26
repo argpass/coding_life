@@ -58,7 +58,42 @@ func concurrencyWriteMap() {
 	fmt.Println("concurrencyWriteMap test bye")
 }
 
+// 并发写map的时候，读map也要加锁才能读
+func concurrencyWRMap() {
+	var pool = map[string]int{}
+	num := 20000
+	var lock = &sync.RWMutex{}
+	ch := make(chan int, num)
+	for i := num; i > 0; i-- {
+		go func(index int, po map[string]int, c chan int) {
+			if index%2 == 0 {
+				for j := 100; j > 0; j-- {
+					lock.Lock()
+					po[fmt.Sprintf("#%d-%d", index, j)] = j
+					lock.Unlock()
+				}
+			} else {
+				for j := 100; j > 0; j-- {
+					lock.RLock()
+					m, ok := po[fmt.Sprintf("#%d-%d", index, j)]
+					lock.RUnlock()
+					if ok {
+						fmt.Println("got m:", m)
+					}
+				}
+			}
+			c <- index
+		}(i, pool, ch)
+	}
+	for t := num; t > 0; t-- {
+		<-ch
+	}
+	fmt.Println("pool len:", len(pool))
+	fmt.Println("concurrencyWriteMap test bye")
+}
+
 func main() {
-	concurrencyReadMap()
-	concurrencyWriteMap()
+	concurrencyWRMap()
+	//concurrencyReadMap()
+	//concurrencyWriteMap()
 }
