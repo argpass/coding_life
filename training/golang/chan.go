@@ -1,9 +1,12 @@
 // 1.chan 可以设置只读，只写，最小权限模式
+// 1.close chan , 所有的'<-'都能收到信号
 
 package main
 
 import (
 	"fmt"
+	"sync"
+	"time"
 )
 
 // use select to test whether channel is full or empty
@@ -44,7 +47,35 @@ func readOnlyChan() {
 
 }
 
+// close chan , 所有的<-都能收到信号
+func closeChan() {
+	var w sync.WaitGroup
+	var exitChan = make(chan int, 1)
+	for i := 0; i < 3; i++ {
+		w.Add(1)
+		go func(index int) {
+			defer w.Done()
+			for {
+				select {
+				case <-exitChan:
+					goto exit
+				default:
+				}
+				fmt.Println("working #-", index)
+				time.Sleep(1000000 * 1)
+			}
+		exit:
+			fmt.Println("exit #", index)
+		}(i)
+	}
+	time.Sleep(1000000 * 2)
+	close(exitChan)
+	w.Wait()
+	fmt.Println("closeChan done")
+}
+
 func main() {
+	closeChan()
 	readOnlyChan()
 	testSelect()
 }
