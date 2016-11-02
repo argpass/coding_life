@@ -11,7 +11,8 @@ func testOffset() {
 	// 4
 	fmt.Println(i << 1)
 	// -2
-	fmt.Println(^i + 1)
+	var j uint32 = 0
+	fmt.Println(^j >> 1)
 }
 func main() {
 	testOffset()
