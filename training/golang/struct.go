@@ -10,6 +10,10 @@ type Child struct {
 	*Parent
 }
 
+type VChild struct {
+	Parent
+}
+
 func foo(pp *Parent) {
 	fmt.Println(pp)
 }
