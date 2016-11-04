@@ -74,7 +74,15 @@ func closeChan() {
 	fmt.Println("closeChan done")
 }
 
+func echoClosedChan() {
+	var done = make(chan int, 1)
+	fmt.Println("chan is nil ? ", nil == done)
+	close(done)
+	fmt.Println("closed chan is nil ? ", nil == done)
+}
+
 func main() {
+	echoClosedChan()
 	closeChan()
 	readOnlyChan()
 	testSelect()
