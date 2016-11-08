@@ -79,9 +79,49 @@ func echoClosedChan() {
 	fmt.Println("chan is nil ? ", nil == done)
 	close(done)
 	fmt.Println("closed chan is nil ? ", nil == done)
+	select {
+	case <-done:
+		fmt.Println("select closed chan done")
+	default:
+		fmt.Println("select closed chan fail")
+	}
+	select {
+	case <-done:
+		fmt.Println("select closed chan done again")
+	default:
+		fmt.Println("select closed chan fail")
+	}
+}
+
+// 1.可以select收发nil chan，但都是失败
+// 2.发送nil到非nil chan是可以的 (nil可以转为chan接受的类型时)
+func selectNilChan() {
+	var d int = 99
+	var sendChan chan<- *int
+	var doneChan <-chan *int
+	select {
+	case sendChan <- &d:
+		fmt.Println("send nil to nil sendChan")
+	default:
+		fmt.Println("send nil fail to nil chan")
+	}
+	select {
+	case <-doneChan:
+		fmt.Println("select success from nil chan")
+	default:
+		fmt.Println("select fail from nil chan")
+	}
+	sendChan = make(chan *int, 1)
+	select {
+	case sendChan <- nil:
+		fmt.Println("send nil to non-nil sendChan successfully")
+	default:
+		fmt.Println("send nil fail to none-nil chan")
+	}
 }
 
 func main() {
+	selectNilChan()
 	echoClosedChan()
 	closeChan()
 	readOnlyChan()
