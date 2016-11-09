@@ -6,15 +6,19 @@ import (
 	"reflect"
 )
 
+// 1.numeric => float64
+// 2.array => []interface{}
+// 3.object => map[string]interface{}
 func main() {
-	var s string = `{"name":"argpass", "age":99}`
+	var s string = `{"name":"argpass", "age":99, "paths": ["pa", "p2"]}`
 	var data = map[string]interface{}{}
 	json.Unmarshal(([]byte)(s), &data)
 	fmt.Println(data)
-	age, _ := data["age"]
+	age := data["age"]
+	paths := data["paths"]
 
-	// the integer values will be converted to float64
 	fmt.Println(reflect.ValueOf(age).Kind() == reflect.Float64)
+	fmt.Println(reflect.ValueOf(paths).Kind() == reflect.Slice)
 
 	// to convert int to json is ok
 	var dMap = map[string]interface{}{
