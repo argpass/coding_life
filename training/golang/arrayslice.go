@@ -33,7 +33,21 @@ func testBasic() {
 	fmt.Println(s)
 }
 
-func main() {
+// 1.slice[length:] => [], cap 0
+// 2.slice[i:i] => [], len 0, cap is cap of [i:]
+// 3.slice[i:i-1] is wrong
+func testSlice() {
+	var one = []int{1}
+	s := one[1:]
+	fmt.Println("len-1, slice[1:]", s)
+	fmt.Println("len-1, slice[1:].cap is 0? ", cap(s) == 0)
+	two := []int{1, 2}
+	s2 := two[1:1]
+	fmt.Println("slice[0:0] is ", s2)
+	fmt.Println("slice[0:0] cap is ", cap(s2))
+	fmt.Println("slice[0:0] len is ", len(s2))
+}
 
-	testSliceArgs()
+func main() {
+	testSlice()
 }

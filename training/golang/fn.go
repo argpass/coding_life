@@ -4,10 +4,11 @@ import (
 	"fmt"
 )
 
-func new() int {
-	return 99
+func namedReturn() (ret int) {
+	ret = 99
+	return ret
 }
 
 func main() {
-	fmt.Println(new())
+	fmt.Println(namedReturn())
 }
