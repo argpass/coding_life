@@ -14,11 +14,16 @@ func testCanMapKey() {
 	fmt.Println(c)
 }
 
+// v := map[key], key不存在的时候v为该类型的默认值而不是nil，也不panic
 func testMapBasic() {
 	var d = map[string]string{}
 	d["name"] = "akun"
 	name := d["name"]
 	fmt.Println("got name ", name)
+	age := d["age"]
+	fmt.Println("[not exist string key]== ?", age == "")
+	var id = map[string]int{}
+	fmt.Println("[not exist int key]== ?", id["age"] == 0)
 }
 
 func main() {
