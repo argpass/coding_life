@@ -7,6 +7,7 @@ package main
 import (
 	"fmt"
 	"sync"
+	"time"
 )
 
 // 实验并发读map不用加锁
@@ -92,7 +93,28 @@ func concurrencyWRMap() {
 	fmt.Println("concurrencyWriteMap test bye")
 }
 
+func concurrencyChan() {
+	ch := make(chan int, 2)
+	for i := 10; i > 0; i-- {
+		go func() {
+			for j := 0; j < 10000; j++ {
+				if len(ch) != 0 {
+					fmt.Println("len chan:%d", len(ch))
+				}
+			}
+		}()
+	}
+	go func() {
+		ch <- 1
+		ch <- 2
+	}()
+	time.Sleep(1000 * 500)
+	<-ch
+	<-ch
+}
+
 func main() {
+	concurrencyChan()
 	concurrencyWRMap()
 	//concurrencyReadMap()
 	//concurrencyWriteMap()
