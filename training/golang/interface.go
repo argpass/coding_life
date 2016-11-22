@@ -20,7 +20,17 @@ type Person struct {
 	Name string
 }
 
+type Writer interface {
+	Write() string
+}
+
+func testNil() {
+	var w Writer = nil
+	fmt.Println("w.Write():", w.Write())
+}
+
 func main() {
+	testNil()
 	var m Model = &Person{}
 	fmt.Println(m.isModel())
 	var a Model
