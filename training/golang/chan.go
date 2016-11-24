@@ -120,7 +120,13 @@ func selectNilChan() {
 	}
 }
 
+func castChan() {
+	var rc <-chan int = make(chan int, 1)
+	wc := (chan<- int)(rc)
+}
+
 func main() {
+	castChan()
 	selectNilChan()
 	echoClosedChan()
 	closeChan()
