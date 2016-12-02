@@ -26,7 +26,13 @@ func testMapBasic() {
 	fmt.Println("[not exist int key]== ?", id["age"] == 0)
 }
 
+func testOp() {
+	var d = map[string]int{}
+	delete(d, "abc")
+}
+
 func main() {
+	testOp()
 	testMapBasic()
 	testCanMapKey()
 }
