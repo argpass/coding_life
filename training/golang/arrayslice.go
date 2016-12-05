@@ -46,6 +46,8 @@ func testSlice() {
 	fmt.Println("slice[0:0] is ", s2)
 	fmt.Println("slice[0:0] cap is ", cap(s2))
 	fmt.Println("slice[0:0] len is ", len(s2))
+	var d = make([]int, 4)
+	fmt.Println("len of d:", len(d))
 }
 
 func main() {

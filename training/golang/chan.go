@@ -120,13 +120,27 @@ func selectNilChan() {
 	}
 }
 
-func castChan() {
-	var rc <-chan int = make(chan int, 1)
-	wc := (chan<- int)(rc)
+// 测试select 多个项有效时，是顺序还是随机选择读写,
+// 是随机选择
+func multiSelect() {
+	var ch_a = make(chan int, 1)
+	var ch_b = make(chan int, 1)
+	var ch_c = make(chan int, 1)
+	ch_a <- 1
+	ch_b <- 2
+	ch_c <- 3
+	select {
+	case <-ch_a:
+		fmt.Println("a")
+	case <-ch_b:
+		fmt.Println("b")
+	case <-ch_c:
+		fmt.Println("c")
+	}
 }
 
 func main() {
-	castChan()
+	multiSelect()
 	selectNilChan()
 	echoClosedChan()
 	closeChan()
