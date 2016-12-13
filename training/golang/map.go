@@ -28,6 +28,25 @@ func testMapBasic() {
 
 func testOp() {
 	var d = map[string]int{}
+	d["a"] = 9
+	d["e"] = 8
+	d["b"] = 2
+	d["yu"] = 2
+	d["kk"] = 2
+	d["jj"] = 2
+	d["ef"] = 2
+	for k, v := range d {
+		fmt.Println(k, v)
+	}
+	fmt.Println("-----")
+	for k, v := range d {
+		fmt.Println(k, v)
+	}
+	fmt.Println("-----")
+	for k, v := range d {
+		fmt.Println(k, v)
+	}
+	fmt.Println("-----")
 	delete(d, "abc")
 }
 

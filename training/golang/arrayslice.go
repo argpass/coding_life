@@ -50,6 +50,16 @@ func testSlice() {
 	fmt.Println("len of d:", len(d))
 }
 
+func foo(p []int) {
+	p = append(p, 99)
+	p[1] = 77
+}
+
 func main() {
+	d := make([]int, 2, 20)
+	d[0] = 1
+	d[1] = 2
+	foo(d)
+	fmt.Println(d)
 	testSlice()
 }
