@@ -5,6 +5,8 @@ import (
 )
 
 func testOffset() {
+	var d = []int{99, 23}
+	fmt.Println(d)
 	var i int32 = 2
 	// 0
 	fmt.Println(i >> 2)
