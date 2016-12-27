@@ -55,7 +55,14 @@ func foo(p []int) {
 	p[1] = 77
 }
 
+// arry is value type, so would never be nil
+func tArray() {
+	var brr [2]int
+	fmt.Println("brr is nil ?", brr == nil)
+}
+
 func main() {
+	tArray()
 	d := make([]int, 2, 20)
 	d[0] = 1
 	d[1] = 2
