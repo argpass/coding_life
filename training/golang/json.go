@@ -6,13 +6,16 @@ import (
 	"reflect"
 )
 
+type dict map[string]interface{}
+
 // 1.numeric => float64
 // 2.array => []interface{}
 // 3.object => map[string]interface{}
 // 4.不要再json中加"\xx", 如果要"\"字符 应该"\\xx"
 func main() {
 	var s string = `{"name":"argpass", "age":99, "paths": ["pa", "p2"], "pattern": "\\["}`
-	var data = map[string]interface{}{}
+	// var data map[string]interface{}
+	var data dict
 	json.Unmarshal(([]byte)(s), &data)
 	fmt.Println(data)
 	age := data["age"]

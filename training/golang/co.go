@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"sync"
 	"time"
+	"runtime"
 )
 
 // 实验并发读map不用加锁
@@ -113,9 +114,66 @@ func concurrencyChan() {
 	<-ch
 }
 
+// 并发读写变量:并不会发生并发异常，可以不用锁,
+func concurrencyVar()  {
+	s := 88
+	var v = &s
+	for i := 0; i < 30000; i++ {
+		go func(j int){
+			count := 0
+			for {
+				if count > 10 {
+					break
+				}
+				if j % 2 == 0 {
+					if count % 2 != 0 {
+						*v = 99
+					}else{
+						*v = 77
+					}
+				}else{
+					if count % 2 == 0 {
+						fmt.Printf("read *v:%d\n", *v)
+					}
+				}
+				runtime.Gosched()
+				count++
+			}
+		}(i)
+	}
+}
+
+// 实验并发写map,即使是map的引用拷贝也需要加锁，否则panic
+func concurrencyWriteMap2() {
+	var pool = map[string]int{}
+	num := 20000
+	//var lock = &sync.RWMutex{}
+	ch := make(chan int, num)
+	for i := num; i > 0; i-- {
+		p := pool
+		go func(index int, po map[string]int, c chan int) {
+			if index%2 == 0 {
+				for j := 100; j > 0; j-- {
+					//lock.Lock()
+					po[fmt.Sprintf("#%d-%d", index, j)] = j
+					//lock.Unlock()
+				}
+			}
+			c <- index
+		}(i, p, ch)
+	}
+	for t := num; t > 0; t-- {
+		<-ch
+	}
+	fmt.Println("pool len:", len(pool))
+	fmt.Println("concurrencyWriteMap test bye")
+}
+
 func main() {
-	concurrencyChan()
-	concurrencyWRMap()
+	//concurrencyChan()
+	//concurrencyWRMap()
 	//concurrencyReadMap()
 	//concurrencyWriteMap()
+	//concurrencyVar()
+	concurrencyWriteMap2()
 }

@@ -36,6 +36,7 @@ func testBasic() {
 // 1.slice[length:] => [], cap 0
 // 2.slice[i:i] => [], len 0, cap is cap of [i:]
 // 3.slice[i:i-1] is wrong
+// 4.数组指针可以下标索引不用解除引用，切片指针则不行
 func testSlice() {
 	var one = []int{1}
 	s := one[1:]
@@ -56,12 +57,27 @@ func foo(p []int) {
 }
 
 // arry is value type, so would never be nil
+// unsupported -1 index
 func tArray() {
-	var brr [2]int
-	fmt.Println("brr is nil ?", brr == nil)
+	//var arr = [2]int{88, 99}
+	//fmt.Println("last is ", arr[-1])
+}
+
+// [:0] is the same with the origin [] in lower-layer memory,
+// thus cap() is the same
+func testClear() {
+	var s = make([]int, 100)
+	s[0] = 1997
+	fmt.Println("s is :", s)
+	var b = s[:0]
+	b = append(b, 1998)
+	fmt.Println("b is:", b)
+	fmt.Println("b's cap is:", cap(b))
+	fmt.Println("s is :", s)
 }
 
 func main() {
+	testClear()
 	tArray()
 	d := make([]int, 2, 20)
 	d[0] = 1
@@ -69,4 +85,6 @@ func main() {
 	foo(d)
 	fmt.Println(d)
 	testSlice()
+	d = []int{1, 2, 3, 4, 5, 6}
+	fmt.Println(d[2:3])
 }

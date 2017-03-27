@@ -47,7 +47,7 @@ func readOnlyChan() {
 
 }
 
-// close chan , 所有的<-都能收到信号
+// close chan , 所有的<-都能收到信号， 判断chan关闭可以使用第二参数bool值
 func closeChan() {
 	var w sync.WaitGroup
 	var exitChan = make(chan int, 1)
@@ -57,7 +57,8 @@ func closeChan() {
 			defer w.Done()
 			for {
 				select {
-				case <-exitChan:
+				case got, ok := <-exitChan:
+					fmt.Println(got, ok)
 					goto exit
 				default:
 				}
@@ -140,10 +141,10 @@ func multiSelect() {
 }
 
 func main() {
-	multiSelect()
-	selectNilChan()
-	echoClosedChan()
+	//multiSelect()
+	//selectNilChan()
+	//echoClosedChan()
 	closeChan()
-	readOnlyChan()
-	testSelect()
+	//readOnlyChan()
+	//testSelect()
 }
