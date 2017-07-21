@@ -65,6 +65,7 @@ func tArray() {
 
 // [:0] is the same with the origin [] in lower-layer memory,
 // thus cap() is the same
+// [1:] cap减少1, cap只看所指向内存区域左端
 func testClear() {
 	var s = make([]int, 100)
 	s[0] = 1997
@@ -76,15 +77,9 @@ func testClear() {
 	fmt.Println("s is :", s)
 }
 
+
 func main() {
-	testClear()
-	tArray()
-	d := make([]int, 2, 20)
-	d[0] = 1
-	d[1] = 2
-	foo(d)
-	fmt.Println(d)
-	testSlice()
-	d = []int{1, 2, 3, 4, 5, 6}
-	fmt.Println(d[2:3])
+	var arr1 [6]int
+	var slice1 []int = arr1[1:2]
+	fmt.Println(len(slice1), cap(slice1))
 }

@@ -65,9 +65,20 @@ func deferReturn() {
 	fmt.Println("#2 got return ", i)
 }
 
+func testDeferClosure()  {
+	var code int
+	defer func(){
+		if code == 99 {
+			fmt.Println("code is 99")
+		}
+	}()
+	code = 99
+}
+
 func main() {
-	deferReturn()
-	testDeferOrder()
-	testDeferOnPanic()
-	testDeferOnExit()
+	//deferReturn()
+	//testDeferOrder()
+	//testDeferOnPanic()
+	//testDeferOnExit()
+	testDeferClosure()
 }

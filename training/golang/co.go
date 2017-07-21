@@ -169,11 +169,40 @@ func concurrencyWriteMap2() {
 	fmt.Println("concurrencyWriteMap test bye")
 }
 
+func testGoDeadLoop()  {
+	runtime.GOMAXPROCS(runtime.NumCPU())
+	for i:=0; i < 10; i++ {
+		go func(n int){
+			for {
+				time.Sleep(1 * time.Microsecond)
+				fmt.Println("go ", n)
+			}
+		}(i)
+	}
+	time.Sleep(1 * time.Second)
+	for {
+		runtime.Gosched()
+		// 其他go程只能调度一会儿就没法得到调度了
+	}
+}
+
+func testGoSchedule()  {
+	for i:=0; i< 241767266; i++ {
+		if i % 1234 == 1 {
+			go func(){
+				fmt.Printf("inner go i:%d\n", i)
+			}()
+		}
+	}
+}
+
 func main() {
 	//concurrencyChan()
 	//concurrencyWRMap()
 	//concurrencyReadMap()
 	//concurrencyWriteMap()
 	//concurrencyVar()
-	concurrencyWriteMap2()
+	//concurrencyWriteMap2()
+	//testGoDeadLoop()
+	testGoSchedule()
 }

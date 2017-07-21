@@ -140,11 +140,22 @@ func multiSelect() {
 	}
 }
 
+func conflict_chans() {
+	ch := make(chan int)
+	select {
+	case ch <- 99:
+		fmt.Println("write chan done")
+	case ch <- 88:
+		fmt.Println("write chan done")
+	}
+}
+
 func main() {
 	//multiSelect()
 	//selectNilChan()
 	//echoClosedChan()
-	closeChan()
+	//closeChan()
 	//readOnlyChan()
 	//testSelect()
+	conflict_chans()
 }

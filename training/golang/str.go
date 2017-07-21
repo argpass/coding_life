@@ -40,7 +40,14 @@ func testStrings() {
 	fmt.Println(strings.Join([]string{"name"}, " "))
 }
 
+func testChar()  {
+	s := "50d"
+	var unit byte = s[len(s) - 1]
+	fmt.Printf("get unit:%s\n", (unit))
+}
+
 func main() {
-	testRune()
-	testStrings()
+	//testRune()
+	//testStrings()
+	testChar()
 }
