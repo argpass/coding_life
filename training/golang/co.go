@@ -6,9 +6,9 @@ package main
 
 import (
 	"fmt"
+	"runtime"
 	"sync"
 	"time"
-	"runtime"
 )
 
 // 实验并发读map不用加锁
@@ -115,24 +115,24 @@ func concurrencyChan() {
 }
 
 // 并发读写变量:并不会发生并发异常，可以不用锁,
-func concurrencyVar()  {
+func concurrencyVar() {
 	s := 88
 	var v = &s
 	for i := 0; i < 30000; i++ {
-		go func(j int){
+		go func(j int) {
 			count := 0
 			for {
 				if count > 10 {
 					break
 				}
-				if j % 2 == 0 {
-					if count % 2 != 0 {
+				if j%2 == 0 {
+					if count%2 != 0 {
 						*v = 99
-					}else{
+					} else {
 						*v = 77
 					}
-				}else{
-					if count % 2 == 0 {
+				} else {
+					if count%2 == 0 {
 						fmt.Printf("read *v:%d\n", *v)
 					}
 				}
@@ -169,10 +169,10 @@ func concurrencyWriteMap2() {
 	fmt.Println("concurrencyWriteMap test bye")
 }
 
-func testGoDeadLoop()  {
+func testGoDeadLoop() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
-	for i:=0; i < 10; i++ {
-		go func(n int){
+	for i := 0; i < 10; i++ {
+		go func(n int) {
 			for {
 				time.Sleep(1 * time.Microsecond)
 				fmt.Println("go ", n)
@@ -186,14 +186,30 @@ func testGoDeadLoop()  {
 	}
 }
 
-func testGoSchedule()  {
-	for i:=0; i< 241767266; i++ {
-		if i % 1234 == 1 {
-			go func(){
+func testGoSchedule() {
+	for i := 0; i < 241767266; i++ {
+		if i%1234 == 1 {
+			go func() {
 				fmt.Printf("inner go i:%d\n", i)
 			}()
 		}
 	}
+}
+
+// 读锁排写，但不拒绝读 go1 go2 可以造成死锁(都能获得读锁)
+func testRLock() {
+	mu := &sync.RWMutex{}
+	go func() {
+		mu.RLock()
+		fmt.Println("go 1")
+		//mu.RUnlock()
+	}()
+	go func() {
+		mu.RLock()
+		fmt.Println("go 2")
+		//mu.RUnlock()
+	}()
+	time.Sleep(1 * time.Second)
 }
 
 func main() {
@@ -204,5 +220,6 @@ func main() {
 	//concurrencyVar()
 	//concurrencyWriteMap2()
 	//testGoDeadLoop()
-	testGoSchedule()
+	//testGoSchedule()
+	testRLock()
 }

@@ -35,6 +35,7 @@ func testOp() {
 	d["kk"] = 2
 	d["jj"] = 2
 	d["ef"] = 2
+	fmt.Printf("len of map:%d\n", len(d))
 	for k, v := range d {
 		fmt.Println(k, v)
 	}
@@ -52,6 +53,4 @@ func testOp() {
 
 func main() {
 	testOp()
-	testMapBasic()
-	testCanMapKey()
 }

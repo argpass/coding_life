@@ -19,6 +19,10 @@ func (p Model) Run() {
 	fmt.Println("model run")
 }
 
+func testAnonymousStruct()  {
+	var persons []struct {Name string; Age int}
+}
+
 func main() {
 	var d = map[string]struct{}{}
 	d["key"] = Model{}

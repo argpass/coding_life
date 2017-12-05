@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"sync"
 	"time"
+	"golang.org/x/sync/errgroup"
 )
 
 // use select to test whether channel is full or empty
@@ -157,5 +158,13 @@ func main() {
 	//closeChan()
 	//readOnlyChan()
 	//testSelect()
-	conflict_chans()
+	//conflict_chans()
+	errgroup.WithContext()
+	for i:=0; i < 10; i++ {
+		go func(){
+			fmt.Println("go")
+			time.Sleep(1 * time.Second)
+		}()
+	}
+	<-make(chan struct{})
 }

@@ -97,6 +97,19 @@ func testReflectType() {
 	e.Who(e)
 }
 
+// type定义后类型信息会变
+func testRenameType()  {
+	type jsonMapType map[string] interface{}
+	a := map[string]interface{}{}
+	b := jsonMapType(a)
+	fmt.Printf("b is type:%T\n", b)
+	fmt.Printf("a is type:%T\n", a)
+	fmt.Printf("b reflect :%v\n", reflect.TypeOf(b))
+}
+
+type T struct {
+	Name string
+}
+
 func main() {
-	testReflectType()
 }

@@ -49,5 +49,5 @@ func testChar()  {
 func main() {
 	//testRune()
 	//testStrings()
-	testChar()
+	//testChar()
 }

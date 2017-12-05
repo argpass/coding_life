@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // nil 切片做变参是ok的
 func testNilSliceArgs()  {
@@ -11,6 +13,19 @@ func testNilSliceArgs()  {
 	fn(args...)
 }
 
+type MyData struct {
+}
+
+func(m MyData) Foo(data MyData) *MyData {
+	return &data
+}
+
+func testArgRef()  {
+	d := MyData{}
+	fmt.Printf("%p\n", d.Foo(d))
+	fmt.Printf("%p\n", d.Foo(MyData{}))
+}
+
 func main()  {
-	testNilSliceArgs()
+	testArgRef()
 }

@@ -77,9 +77,70 @@ func testClear() {
 	fmt.Println("s is :", s)
 }
 
+// 迭代中改变slice会生效
+func testModifyOnItering() {
+	var data []int = []int{1, 2, 3, 4, 5, 6}
+	for i, d := range data {
+		fmt.Printf("%d->%d\n", i, d)
+		fmt.Println(data)
+		data[len(data)-i-1] = 99
+	}
+}
 
-func main() {
+func testCap() {
 	var arr1 [6]int
 	var slice1 []int = arr1[1:2]
 	fmt.Println(len(slice1), cap(slice1))
+}
+
+func testAppend() {
+	arr := make([]int, 3)
+	fmt.Println(arr)
+	arr = append(arr, 99)
+	fmt.Println(arr)
+}
+
+func testSliceCap() {
+	s := make([]int, 0, 10)
+	s1 := s[:0:5]
+	s2 := s[5:5:10]
+	fmt.Printf("len %d, cap %d\n", len(s1), cap(s1))
+	fmt.Printf("len %d, cap %d\n", len(s2), cap(s2))
+	fmt.Printf("s:%v\n", s)
+	s2 = append(s2, 99)
+	s1 = append(s1, 11)
+	fmt.Printf("len %d, cap %d\n", len(s1), cap(s1))
+	fmt.Printf("len %d, cap %d\n", len(s2), cap(s2))
+	s3 := s[0:10]
+	fmt.Printf("s3:%+v\n", s3)
+	// 这很神奇，copy是使用len计算的，如果任意一个len为0 则copy 0
+	d := []int{1, 2}
+	// 但你可以动态切片来修改, 就像这样
+	n := copy(s1[len(s1):cap(s1)], d)
+	s1 = s1[0 : len(s1)+n]
+	fmt.Printf("copied n:%d\n", n)
+	fmt.Printf("len %d, cap %d, data:%v\n", len(s1), cap(s1), s1)
+}
+
+type MyData struct {
+	Age int
+}
+
+func (m *MyData) ChangeAge(v int) {
+	m.Age = v
+}
+
+func testModifyElem() {
+	s := make([]MyData, 5, 10)
+	s[0].ChangeAge(99)
+	s[0].Age++
+	s[0].Age += 88
+	v := &(s[0])
+	v.ChangeAge(55)
+	fmt.Printf("s:%+v\n", s)
+}
+
+
+func main() {
+	testModifyElem()
 }

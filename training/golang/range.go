@@ -2,21 +2,25 @@ package main
 
 import (
 	"fmt"
-	"time"
 )
 
+type MyData struct {
+	Age int
+}
+
+func (m *MyData) ChangeAge(v int) {
+	m.Age = v
+}
+
+func testChangeOnItering() {
+	ds := make([]MyData, 5)
+	// 实际上d只是一个拷贝，所以不能修改ds
+	for _, d := range ds {
+		d.ChangeAge(99)
+	}
+	fmt.Printf("after itering, ds:%+v\n", ds)
+}
+
 func main() {
-	var arr = []int{3, 4, 5}
-	fmt.Printf("now:%v\n", time.Now().Format("060102 15:04:05"))
-
-	// only got index of the slice
-	fmt.Println("\n-------------only index --------")
-	for d := range arr {
-		fmt.Print(d, ",")
-	}
-
-	fmt.Println("\n------------data--------")
-	for _, d := range arr {
-		fmt.Print(d, ",")
-	}
+	testChangeOnItering()
 }
