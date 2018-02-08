@@ -68,6 +68,19 @@ func testNamedReturn() {
 	fmt.Printf("err2:%v\n", err)
 }
 
+func testForVar() {
+	v := 999
+	for i := 0; i < 10; i++ {
+		var val *int
+		if val != nil {
+			fmt.Printf("val is assigned aready\n")
+		} else {
+			fmt.Printf("val is %p, i is %p\n", &val, &i)
+		}
+		val = &v
+	}
+}
+
 func main() {
-	testNamedReturn()
+	testForVar()
 }

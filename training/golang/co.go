@@ -212,6 +212,35 @@ func testRLock() {
 	time.Sleep(1 * time.Second)
 }
 
+// slice是并发安全的
+func testSliceConcurrency() {
+	data := []int{1, 2, 3}
+	go func() {
+		for {
+			data[1] = int(time.Now().Unix())
+			runtime.Gosched()
+		}
+	}()
+	go func() {
+		for {
+			for _, v := range data {
+				fmt.Printf("read v:%d\n", v)
+				runtime.Gosched()
+			}
+		}
+	}()
+	go func() {
+		for {
+			for i := 0; i < 1000; i++ {
+				data = append(data, i*2)
+				runtime.Gosched()
+			}
+			data = data[:3:3]
+		}
+	}()
+	select {}
+}
+
 func main() {
 	//concurrencyChan()
 	//concurrencyWRMap()
@@ -221,5 +250,6 @@ func main() {
 	//concurrencyWriteMap2()
 	//testGoDeadLoop()
 	//testGoSchedule()
-	testRLock()
+	//testRLock()
+	testSliceConcurrency()
 }
